@@ -6,7 +6,7 @@
   <ul class="movie-ul">
     <% data.forEach(post => { %>
     <li>
-      <a href="/post/<%= post._id %>">
+      <a href="/movie/<%= post._id %>">
         <span><%= post.title %></span>
         <span class="movie-list__date"
           ><%= post.createdAt.toDateString() %></span

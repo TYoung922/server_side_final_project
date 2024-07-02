@@ -40,9 +40,9 @@ app.use(
 
 // Duplicate your route file below to also have a admin instead of main.
 app.use("/", require("./server/routes/main"));
-app.use("/", require("./server/routes/admin"));
+app.use("/", require("./server/routes/adder"));
 
-// const insertMovieData = require("./server/routes/dummydate");
+// const insertMovieData = require("./server/routes/startingdata");
 // insertMovieData();
 
 app.get("/", (req, res) => {
