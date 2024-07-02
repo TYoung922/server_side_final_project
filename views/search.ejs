@@ -1,0 +1,18 @@
+<div class="author">
+  <h1 class="movies__heading">Search Results</h1>
+</div>
+
+<section class="movies">
+  <ul class="movie-ul">
+    <% data.forEach(post => { %>
+    <li>
+      <a href="/post/<%= post._id %>">
+        <span><%= post.title %></span>
+        <span class="movie-list__date"
+          ><%= post.createdAt.toDateString() %></span
+        >
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</section>
