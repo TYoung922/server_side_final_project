@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Movies = require("../models/movies");
+const Movie = require("../models/movies");
 
 //Home Page
 router.get("/", async (req, res) => {
   try {
     const locals = {
-      title: "Movie Database",
+      title: "MFM Database",
       description:
         "Simple list of movies created with NodeJs, Express & MongoDb.",
     };
@@ -14,12 +14,12 @@ router.get("/", async (req, res) => {
     let perPage = 3;
     let page = req.query.page || 1;
 
-    const data = await Movies.aggregate([{ $sort: { title: -1 } }])
+    const data = await Movie.aggregate([{ $sort: { title: -1 } }])
       .skip(perPage * page - perPage)
       .limit(perPage)
       .exec();
 
-    const count = await Movies.countDocuments({});
+    const count = await Movie.countDocuments({});
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
     const hasNextPagePlus = nextPage <= Math.ceil(count * perPage);
@@ -44,30 +44,15 @@ router.get("/about", async (req, res) => {
   };
 
   try {
-    const data = await Movies.find().sort({ title: "desc" });
+    const data = await Movie.find().sort({ title: "desc" });
     res.render("about", { locals, data });
   } catch (error) {
     console.log(error);
   }
 });
 
-//add Page
-router.get("/add", async (req, res) => {
-  const locals = {
-    title: "Sign in to add",
-    description: "Use your account to add, edit or delete movies.",
-  };
-
-  try {
-    const data = await Movies.find().sort({ title: "desc" });
-    res.render("add-dashboard", { locals, data });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 //Get Movie by ID
-router.get("/movie/:id", async (req, res) => {
+router.get("/movies/:id", async (req, res) => {
   try {
     let slug = req.params.id;
 

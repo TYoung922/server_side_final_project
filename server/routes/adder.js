@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Movies = require("../models/movies");
+const Movie = require("../models/movies");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWTSECRET;
-const adderLayout = "../../views/layouts/add-layout";
+const adderLayout = "../views/layouts/add-layout";
 
 /**
  * Check Login Middleware
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).alert("Please LogIn");
   }
 
   try {
@@ -22,7 +22,9 @@ const authMiddleware = (req, res, next) => {
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res
+      .status(401)
+      .json({ message: "Not a user. Please sign up first." });
   }
 };
 
@@ -33,7 +35,7 @@ const authMiddleware = (req, res, next) => {
 router.get("/adder", async (req, res) => {
   try {
     const locals = {
-      title: "Adder",
+      title: "LogIn/Register",
       description: "A database of movies",
     };
     res.render("add-movies/add-index", { locals, layout: adderLayout });
@@ -61,7 +63,7 @@ router.post("/adder", async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, jwtSecret);
     res.cookie("token", token, { httpOnly: true });
-    res.redirect("/dashboard");
+    res.redirect("adder/dashboard");
   } catch (error) {
     console.log(error);
   }
@@ -69,14 +71,14 @@ router.post("/adder", async (req, res) => {
 
 // GET /dashboard
 //Adder - Dashboard
-router.get("/dashboard", authMiddleware, async (req, res) => {
+router.get("/adder/dashboard", authMiddleware, async (req, res) => {
   try {
     const locals = {
       title: "Dashboard",
       description: "A blog template made with NodeJS and ExpressJS",
     };
 
-    const data = await Movies.find();
+    const data = await Movie.find();
     res.render("add-movies/add-dashboard", {
       locals,
       data,
@@ -123,16 +125,16 @@ router.get("/logout", authMiddleware, async (req, res) => {
   }
 });
 
-//GET / add-post
+//GET / add-movie
 //Adder - Create New Post
-router.get("/add-post", authMiddleware, async (req, res) => {
+router.get("/add-movies", authMiddleware, async (req, res) => {
   try {
     const locals = {
       title: "Create Movie",
       description: "A blog template made with NodeJS and ExpressJS, and EJS",
     };
 
-    const data = await Movies.find();
+    const data = await Movie.find();
     res.render("add-movies/add-movies", { locals, data, layout: adderLayout });
   } catch (error) {
     console.log(error);
@@ -141,16 +143,16 @@ router.get("/add-post", authMiddleware, async (req, res) => {
 
 //POST / add-post
 //Adder - Create New Post
-router.post("/add-post/", authMiddleware, async (req, res) => {
+router.post("/add-movies/", authMiddleware, async (req, res) => {
   try {
     console.log(res.body);
     try {
-      const newMovie = new Movies({
+      const newMovie = new Movie({
         title: req.body.title,
         body: req.body.body,
       });
-      await Movies.create(newMovie);
-      res.redirect("/dashboard");
+      await Movie.create(newMovie);
+      res.redirect("adder/dashboard");
     } catch (error) {
       console.log(error);
     }
@@ -161,14 +163,14 @@ router.post("/add-post/", authMiddleware, async (req, res) => {
 
 /** Get /edit-post
  * Adder - Update Post */
-router.get("/edit-post/:id", authMiddleware, async (req, res) => {
+router.get("/edit-movies/:id", authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: "Edit Mvie",
+      title: "Edit Movie",
       description: "A blog template made with NodeJS and ExpressJS, and EJS",
     };
 
-    const data = await Movies.findOne({ _id: req.params.id });
+    const data = await Movie.findOne({ _id: req.params.id });
     res.render("add-movies/edit-movies", { locals, data, layout: adderLayout });
   } catch (error) {
     console.log(error);
@@ -178,14 +180,14 @@ router.get("/edit-post/:id", authMiddleware, async (req, res) => {
 /** PUT /edit-post
  * Adder - Edit Post
  */
-router.put("/edit-post/:id", authMiddleware, async (req, res) => {
+router.put("/edit-movies/:id", authMiddleware, async (req, res) => {
   try {
-    await Movies.findByIdAndUpdate(req.params.id, {
+    await Movie.findByIdAndUpdate(req.params.id, {
       title: req.body.title,
       body: req.body.body,
       updatedAt: Date.now(),
     });
-    res.redirect("/dashboard");
+    res.redirect("adder/dashboard");
   } catch (error) {
     console.log(error);
   }
@@ -196,11 +198,12 @@ router.put("/edit-post/:id", authMiddleware, async (req, res) => {
  */
 router.delete("/delete-post/:id", authMiddleware, async (req, res) => {
   try {
-    await Movies.deleteOne({ _id: req.params.id });
-    res.redirect("/dashboard");
+    await Movie.deleteOne({ _id: req.params.id });
+    res.redirect("adder/dashboard");
   } catch (error) {
     console.log(error);
   }
 });
 
 module.exports = router;
+// module.exports = authMiddleware;

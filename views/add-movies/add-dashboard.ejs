@@ -1,14 +1,14 @@
 <div class="admin-title">
-    <h2>Movies</h2>
-    <a href="/add-movie" class="button"> + Add New Movie</a>
+<h2>Movies</h2>
+<a href="/add-movie" class="addNew"> + Add New Movie</a>
   </div>
   
   <ul class="admin-movies"></ul>
   <% data.forEach(movie => { %>
       
       <li class="items">
-          <a href="/movie/<%= movie._id %>"> <%= movie.title %> &nearr;</a>
-          <div class="movie-controls">
+          <a href="/movies/<%= movie._id %>"> <%= movie.title %> &nearr;</a>
+          <div class="adder-movie-controls">
               <a href="/edit-movie/<%= movie._id %>" class="btn">Edit</a>
   
               <form action="/delete-movie/<%= movie._id %>?_method=DELETE" method="post">
