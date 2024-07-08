@@ -125,13 +125,13 @@ router.get("/logout", authMiddleware, async (req, res) => {
   }
 });
 
-//GET / add-movie
+//GET / add-movies
 //Adder - Create New Post
 router.get("/add-movies", authMiddleware, async (req, res) => {
   try {
     const locals = {
       title: "Create Movie",
-      description: "A blog template made with NodeJS and ExpressJS, and EJS",
+      description: "A movie template made with NodeJS and ExpressJS, and EJS",
     };
 
     const data = await Movie.find();
@@ -149,10 +149,11 @@ router.post("/add-movies/", authMiddleware, async (req, res) => {
     try {
       const newMovie = new Movie({
         title: req.body.title,
-        body: req.body.body,
+        description: req.body.description,
+        posterUrl: req.body.posterUrl,
       });
       await Movie.create(newMovie);
-      res.redirect("adder/dashboard");
+      res.redirect("/adder/dashboard");
     } catch (error) {
       console.log(error);
     }
@@ -184,10 +185,11 @@ router.put("/edit-movies/:id", authMiddleware, async (req, res) => {
   try {
     await Movie.findByIdAndUpdate(req.params.id, {
       title: req.body.title,
-      body: req.body.body,
+      description: req.body.description,
+      posterUrl: req.body.posterUrl,
       updatedAt: Date.now(),
     });
-    res.redirect("adder/dashboard");
+    res.redirect("/adder/dashboard");
   } catch (error) {
     console.log(error);
   }
@@ -196,10 +198,10 @@ router.put("/edit-movies/:id", authMiddleware, async (req, res) => {
 /** DELETE /delete-post
  * Adder - Delete Post
  */
-router.delete("/delete-post/:id", authMiddleware, async (req, res) => {
+router.delete("/delete-movies/:id", authMiddleware, async (req, res) => {
   try {
     await Movie.deleteOne({ _id: req.params.id });
-    res.redirect("adder/dashboard");
+    res.redirect("/adder/dashboard");
   } catch (error) {
     console.log(error);
   }

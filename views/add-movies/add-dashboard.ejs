@@ -1,6 +1,6 @@
 <div class="admin-title">
 <h2>Movies</h2>
-<a href="/add-movie" class="addNew"> + Add New Movie</a>
+<a href="/add-movies" class="addNew"> + Add New Movie</a>
   </div>
   
   <ul class="admin-movies"></ul>
@@ -9,9 +9,9 @@
       <li class="items">
           <a href="/movies/<%= movie._id %>"> <%= movie.title %> &nearr;</a>
           <div class="adder-movie-controls">
-              <a href="/edit-movie/<%= movie._id %>" class="btn">Edit</a>
+              <a href="/edit-movies/<%= movie._id %>" class="btn">Edit</a>
   
-              <form action="/delete-movie/<%= movie._id %>?_method=DELETE" method="post">
+              <form action="/delete-movies/<%= movie._id %>?_method=DELETE" method="post">
                   <input type="submit" value="Delete" class="btn" />
               </form>
           </div>

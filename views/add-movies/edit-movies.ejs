@@ -1,5 +1,5 @@
-<a href="/dashboard">&larr; Back</a>
-<div class="ader-title">
+<a href="/adder/dashboard">&larr; Back</a>
+<div class="admin-title">
   <h2>View / Edit Movies</h2>
 
   <form action="/delete-movie<%= data._id %>?_method=DELETE" method="POST">
@@ -7,7 +7,7 @@
   </form>
 </div>
 
-<form action="/edit-movie/<%= data._id %>?_method=PUT" method="POST">
+<form action="/edit-movies/<%= data._id %>?_method=PUT" method="POST">
   <label for="title"><b>Title</b></label>
   <input
     type="text"
@@ -16,11 +16,13 @@
     value="<%= data.title %>"
   />
 
-  <label for="body"><b>Description</b></label>
-  <textarea name="body" cols="50" rows="10"><%= data.body %></textarea>
+  <label for="description"><b>Description</b></label>
+  <textarea name="description" cols="50" rows="10">
+<%= data.description %></textarea
+  >
 
-  <label for="body"><b>Movie Poster URL</b></label>
-  <textarea name="poster" cols="50" rows="10"><%= data.body %></textarea>
+  <label for="posterUrl"><b>Movie Poster URL</b></label>
+  <input type="text" name="posterUrl" value="<%= data. posterUrl %>" />
 
   <input type="submit" value="Update" class="btn" />
 </form>
